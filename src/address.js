@@ -1,35 +1,8 @@
-// const axios = require("axios")
 const Bitcoin = require('@psf/bitcoincashjs-lib')
 const cashaddr = require('ecashaddrjs')
 const coininfo = require('@psf/coininfo')
 
 class Address {
-  constructor (config) {
-    const tmp = {}
-    if (!config || !config.restURL) tmp.restURL = 'https://api.bchjs.cash/v5/'
-    else tmp.restURL = config.restURL
-
-    this.restURL = tmp.restURL
-    this.apiToken = tmp.apiToken
-    this.authToken = config.authToken
-
-    if (this.authToken) {
-      // Add Basic Authentication token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: this.authToken
-        }
-      }
-    } else {
-      // Add JWT token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: `Token ${this.apiToken}`
-        }
-      }
-    }
-  }
-
   /**
    * @api Address.toLegacyAddress() toLegacyAddress()
    * @apiName toLegacyAddress
@@ -148,11 +121,7 @@ class Address {
   toEcashAddress (address, prefix = true) {
     const decoded = this._decode(address)
 
-    const ecashAddress = cashaddr.encode(
-      'ecash',
-      decoded.type,
-      decoded.hash
-    )
+    const ecashAddress = cashaddr.encode('ecash', decoded.type, decoded.hash)
 
     if (prefix) return ecashAddress
     return ecashAddress.split(':')[1]
@@ -177,11 +146,7 @@ class Address {
   toEtokenAddress (address, prefix = true) {
     const decoded = this._decode(address)
 
-    const etokenAddress = cashaddr.encode(
-      'etoken',
-      decoded.type,
-      decoded.hash
-    )
+    const etokenAddress = cashaddr.encode('etoken', decoded.type, decoded.hash)
 
     if (prefix) return etokenAddress
     return etokenAddress.split(':')[1]

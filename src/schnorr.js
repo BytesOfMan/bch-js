@@ -1,28 +1,6 @@
 const schnorr = require('bip-schnorr')
 
 class Schnorr {
-  constructor (config) {
-    this.restURL = config.restURL
-    this.apiToken = config.apiToken
-    this.authToken = config.authToken
-
-    if (this.authToken) {
-      // Add Basic Authentication token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: this.authToken
-        }
-      }
-    } else {
-      // Add JWT token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: `Token ${this.apiToken}`
-        }
-      }
-    }
-  }
-
   /**
    * @api Schnorr.sign() sign()
    * @apiName sign
