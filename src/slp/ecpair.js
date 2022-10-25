@@ -6,12 +6,6 @@ const BCHJSECPair = require('../ecpair')
 const bchaddrjs = require('bchaddrjs-slp')
 
 class ECPair extends BCHJSECPair {
-  /*
-  constructor(restURL) {
-    super(restURL)
-    this.restURL = restURL
-  }
-  */
   /**
    * @api SLP.ECPair.toSLPAddress() toSLPAddress()
    * @apiName toSLPAddress

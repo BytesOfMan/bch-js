@@ -13,36 +13,14 @@ const ECPair = require('./ecpair')
 // const HDNode = require("./hdnode")
 const TokenType1 = require('./tokentype1')
 const NFT1 = require('./nft1')
-const Utils = require('./utils')
 
 // SLP is a superset of BITBOX
 class SLP {
-  constructor (config) {
-    this.restURL = config.restURL
-    this.apiToken = config.apiToken
-    this.authToken = config.authToken
-
-    if (this.authToken) {
-      // Add Basic Authentication token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: this.authToken
-        }
-      }
-    } else {
-      // Add JWT token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: `Token ${this.apiToken}`
-        }
-      }
-    }
-
-    this.Address = new Address(config)
+  constructor () {
+    this.Address = new Address()
     this.ECPair = ECPair
-    this.TokenType1 = new TokenType1(config)
-    this.NFT1 = new NFT1(config)
-    this.Utils = new Utils(config)
+    this.TokenType1 = new TokenType1()
+    this.NFT1 = new NFT1()
   }
 }
 

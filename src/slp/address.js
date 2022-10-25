@@ -5,12 +5,9 @@ let bchAddress
 const bchaddrjs = require('bchaddrjs-slp')
 
 class Address extends BCHJSAddress {
-  constructor (config) {
-    super(config)
-
-    this.restURL = config.restURL
-
-    bchAddress = new BCHJSAddress(config)
+  constructor () {
+    super()
+    bchAddress = new BCHJSAddress()
   }
 
   /**
@@ -573,83 +570,6 @@ class Address extends BCHJSAddress {
     return bchAddress.detectAddressType(cashAddr)
   }
 
-  /*
-  async details(address) {
-    let tmpBITBOX
-    let network
-    if (typeof address === "string")
-      network = this.detectAddressNetwork(address)
-    else network = this.detectAddressNetwork(address[0])
-
-    if (network === "mainnet")
-      tmpBITBOX = new BITBOX({ restURL: "https://rest.bitcoin.com/v2/" })
-    else tmpBITBOX = new BITBOX({ restURL: "https://trest.bitcoin.com/v2/" })
-
-    if (typeof address === "string") {
-      const cashAddr = bchaddrjs.toCashAddress(address)
-      return tmpBITBOX.Address.details(cashAddr)
-    }
-    address = address.map(address => bchaddrjs.toCashAddress(address))
-    return tmpBITBOX.Address.details(address)
-  }
-
-  async utxo(address) {
-    let tmpBITBOX
-    let network
-    if (typeof address === "string")
-      network = this.detectAddressNetwork(address)
-    else network = this.detectAddressNetwork(address[0])
-
-    if (network === "mainnet")
-      tmpBITBOX = new BITBOX({ restURL: "https://rest.bitcoin.com/v2/" })
-    else tmpBITBOX = new BITBOX({ restURL: "https://trest.bitcoin.com/v2/" })
-
-    if (typeof address === "string") {
-      const cashAddr = bchaddrjs.toCashAddress(address)
-      return tmpBITBOX.Address.utxo(cashAddr)
-    }
-    address = address.map(address => bchaddrjs.toCashAddress(address))
-    return tmpBITBOX.Address.utxo(address)
-  }
-
-  async unconfirmed(address) {
-    let tmpBITBOX
-    let network
-    if (typeof address === "string")
-      network = this.detectAddressNetwork(address)
-    else network = this.detectAddressNetwork(address[0])
-
-    if (network === "mainnet")
-      tmpBITBOX = new BITBOX({ restURL: "https://rest.bitcoin.com/v2/" })
-    else tmpBITBOX = new BITBOX({ restURL: "https://trest.bitcoin.com/v2/" })
-
-    if (typeof address === "string") {
-      const cashAddr = bchaddrjs.toCashAddress(address)
-      return tmpBITBOX.Address.unconfirmed(cashAddr)
-    }
-    address = address.map(address => bchaddrjs.toCashAddress(address))
-    return tmpBITBOX.Address.unconfirmed(address)
-  }
-
-  async transactions(address) {
-    let tmpBITBOX
-    let network
-    if (typeof address === "string")
-      network = this.detectAddressNetwork(address)
-    else network = this.detectAddressNetwork(address[0])
-
-    if (network === "mainnet")
-      tmpBITBOX = new BITBOX({ restURL: "https://rest.bitcoin.com/v2/" })
-    else tmpBITBOX = new BITBOX({ restURL: "https://trest.bitcoin.com/v2/" })
-
-    if (typeof address === "string") {
-      const cashAddr = bchaddrjs.toCashAddress(address)
-      return tmpBITBOX.Address.transactions(cashAddr)
-    }
-    address = address.map(address => bchaddrjs.toCashAddress(address))
-    return tmpBITBOX.Address.transactions(address)
-  }
-*/
   _ensureValidAddress (address) {
     try {
       bchaddrjs.toCashAddress(address)

@@ -10,45 +10,18 @@ const Script = require('../script')
 
 const BigNumber = require('bignumber.js')
 const slpMdm = require('slp-mdm')
-const axios = require('axios')
 
 // const addy = new Address()
 let addy
 const TransactionBuilder = require('../transaction-builder')
 
-let _this // local global
-
 class TokenType1 {
-  constructor (config) {
-    this.restURL = config.restURL
-    this.apiToken = config.apiToken
-    this.authToken = config.authToken
-
-    if (this.authToken) {
-      // Add Basic Authentication token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: this.authToken
-        }
-      }
-    } else {
-      // Add JWT token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: `Token ${this.apiToken}`
-        }
-      }
-    }
-
-    addy = new Address(config)
+  constructor () {
+    addy = new Address()
     this.Script = new Script()
-
-    this.axios = axios
 
     // Instantiate the transaction builder.
     TransactionBuilder.setAddress(addy)
-
-    _this = this
   }
 
   /**
@@ -125,7 +98,9 @@ class TokenType1 {
         // console.log('baseChange: ', baseChange)
 
         // Check for potential burns
-        const outputQty = new BigNumber(baseChange).plus(new BigNumber(baseQty))
+        const outputQty = new BigNumber(baseChange).plus(
+          new BigNumber(baseQty)
+        )
         const inputQty = new BigNumber(totalTokens)
         const tokenOutputDelta = outputQty.minus(inputQty).toString() !== '0'
         if (tokenOutputDelta) {
@@ -382,14 +357,19 @@ class TokenType1 {
       // Loop through the tokenUtxos array and find the minting baton.
       let mintBatonUtxo
       for (let i = 0; i < tokenUtxos.length; i++) {
-        if (tokenUtxos[i].utxoType === 'minting-baton' || tokenUtxos[i].type === 'baton') {
+        if (
+          tokenUtxos[i].utxoType === 'minting-baton' ||
+          tokenUtxos[i].type === 'baton'
+        ) {
           mintBatonUtxo = tokenUtxos[i]
         }
       }
 
       // Throw an error if the minting baton could not be found.
       if (!mintBatonUtxo) {
-        throw new Error('Minting baton could not be found in tokenUtxos array.')
+        throw new Error(
+          'Minting baton could not be found in tokenUtxos array.'
+        )
       }
 
       const tokenId = mintBatonUtxo.tokenId
@@ -422,62 +402,6 @@ class TokenType1 {
       return script
     } catch (err) {
       console.log('Error in generateMintOpReturn()')
-      throw err
-    }
-  }
-
-  /**
-   * @api SLP.TokenType1.getHexOpReturn() getHexOpReturn()
-   * @apiName getHexOpReturn
-   * @apiGroup SLP TokenType1
-   * @apiDescription Get hex representation of an SLP OP_RETURN
-   * This command returns a hex encoded OP_RETURN for SLP Send (Token Type 1)
-   * transactions. Rather than computing it directly, it calls bch-api to do
-   * the heavy lifting. This is easier and lighter weight for web apps.
-   *
-   * @apiExample Example usage:
-   *
-   *  const tokenUtxos = [{
-   *   tokenId: "0a321bff9761f28e06a268b14711274bb77617410a16807bd0437ef234a072b1",
-   *   decimals: 0,
-   *   tokenQty: 2
-   *  }]
-   *
-   *  const sendQty = 1.5
-   *
-   *  const result = await bchjs.SLP.TokenType1.getHexOpReturn(tokenUtxos, sendQty)
-   *
-   *  // result:
-   *  {
-   *    "script": "6a04534c500001010453454e44200a321bff9761f28e06a268b14711274bb77617410a16807bd0437ef234a072b1080000000000000001080000000000000000",
-   *    "outputs": 2
-   *  }
-   */
-  async getHexOpReturn (tokenUtxos, sendQty) {
-    try {
-      // TODO: Add input filtering.
-
-      const data = {
-        tokenUtxos,
-        sendQty
-      }
-
-      const result = await _this.axios.post(
-        `${this.restURL}slp/generatesendopreturn`,
-        data,
-        this.axiosOptions
-      )
-
-      const slpSendObj = result.data
-
-      // const script = _this.Buffer.from(slpSendObj.script)
-      //
-      // slpSendObj.script = script
-      // return slpSendObj
-
-      return slpSendObj
-    } catch (err) {
-      console.log('Error in getHexOpReturn()')
       throw err
     }
   }

@@ -4,7 +4,6 @@
 
 const assert = require('chai').assert
 const sinon = require('sinon')
-// const axios = require("axios")
 
 // Default to unit tests unless some other value for TEST is passed.
 if (!process.env.TEST) process.env.TEST = 'unit'
@@ -1406,41 +1405,6 @@ describe('#SLP TokenType1', () => {
       // console.log(`result: `, result)
 
       assert.equal(Buffer.isBuffer(result), true)
-    })
-  })
-
-  describe('#getHexOpReturn', () => {
-    it('should return OP_RETURN object ', async () => {
-      const tokenUtxos = [
-        {
-          tokenId:
-            '0a321bff9761f28e06a268b14711274bb77617410a16807bd0437ef234a072b1',
-          decimals: 0,
-          tokenQty: 2
-        }
-      ]
-
-      const sendQty = 1.5
-
-      sandbox.stub(bchjs.SLP.TokenType1.axios, 'post').resolves({
-        data: {
-          script:
-            '6a04534c500001010453454e44200a321bff9761f28e06a268b14711274bb77617410a16807bd0437ef234a072b1080000000000000001080000000000000000',
-          outputs: 2
-        }
-      })
-
-      const result = await bchjs.SLP.TokenType1.getHexOpReturn(
-        tokenUtxos,
-        sendQty
-      )
-      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
-
-      assert.property(result, 'script')
-      assert.isString(result.script)
-
-      assert.property(result, 'outputs')
-      assert.isNumber(result.outputs)
     })
   })
 })
